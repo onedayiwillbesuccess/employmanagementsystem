@@ -1,9 +1,9 @@
-FROM eclipse-temurin:17-jre
+FROM tomcat:10.1-jdk17-temurin
 
-WORKDIR /app
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY target/employee-management-system-1.0.0.jar app.jar
+COPY target/employee-management-system.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["catalina.sh", "run"]
