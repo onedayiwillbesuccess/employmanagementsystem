@@ -4,6 +4,7 @@ import com.company.model.Department;
 import com.company.model.Employee;
 import com.company.model.EmployeeStatus;
 import com.company.repository.EmployeeRepository;
+import com.company.validation.ValidationUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,13 +28,23 @@ public class EmployeeService {
             return false;
         }
 
-        if (employee.getAge() < 18) {
-            System.out.println("Employee age must be at least 18.");
+        if (!ValidationUtil.isValidAge(employee.getAge())) {
+            System.out.println("Invalid employee age.");
             return false;
         }
 
-        if (employee.getSalary() <= 0) {
-            System.out.println("Salary must be greater than zero.");
+        if (!ValidationUtil.isValidEmail(employee.getEmail())) {
+            System.out.println("Invalid email address.");
+            return false;
+        }
+
+        if (!ValidationUtil.isValidPhone(employee.getPhone())) {
+            System.out.println("Invalid phone number.");
+            return false;
+        }
+
+        if (!ValidationUtil.isValidSalary(employee.getSalary())) {
+            System.out.println("Invalid salary.");
             return false;
         }
 
@@ -42,7 +53,7 @@ public class EmployeeService {
     }
 
     /**
-     * Get Employee by ID
+     * Get Employee By ID
      */
     public Employee getEmployee(int id) {
         return repository.findById(id);
@@ -56,18 +67,32 @@ public class EmployeeService {
     }
 
     /**
-     * Delete Employee
-     */
-    public boolean deleteEmployee(int id) {
-        return repository.delete(id);
-    }
-
-    /**
      * Update Employee
      */
     public boolean updateEmployee(Employee employee) {
 
         if (!repository.existsById(employee.getId())) {
+            System.out.println("Employee not found.");
+            return false;
+        }
+
+        if (!ValidationUtil.isValidAge(employee.getAge())) {
+            System.out.println("Invalid employee age.");
+            return false;
+        }
+
+        if (!ValidationUtil.isValidEmail(employee.getEmail())) {
+            System.out.println("Invalid email address.");
+            return false;
+        }
+
+        if (!ValidationUtil.isValidPhone(employee.getPhone())) {
+            System.out.println("Invalid phone number.");
+            return false;
+        }
+
+        if (!ValidationUtil.isValidSalary(employee.getSalary())) {
+            System.out.println("Invalid salary.");
             return false;
         }
 
@@ -76,14 +101,21 @@ public class EmployeeService {
     }
 
     /**
-     * Total Employees
+     * Delete Employee
+     */
+    public boolean deleteEmployee(int id) {
+        return repository.delete(id);
+    }
+
+    /**
+     * Get Employee Count
      */
     public int getEmployeeCount() {
         return repository.count();
     }
 
     /**
-     * Search By Department
+     * Search Employees By Department
      */
     public List<Employee> getEmployeesByDepartment(Department department) {
 
@@ -101,7 +133,7 @@ public class EmployeeService {
     }
 
     /**
-     * Search By Status
+     * Search Employees By Status
      */
     public List<Employee> getEmployeesByStatus(EmployeeStatus status) {
 
@@ -119,7 +151,7 @@ public class EmployeeService {
     }
 
     /**
-     * Sort By Name
+     * Sort Employees By Name
      */
     public List<Employee> sortByName() {
 
@@ -133,7 +165,7 @@ public class EmployeeService {
     }
 
     /**
-     * Sort By Salary
+     * Sort Employees By Salary
      */
     public List<Employee> sortBySalary() {
 
@@ -146,7 +178,7 @@ public class EmployeeService {
     }
 
     /**
-     * Highest Salary Employee
+     * Get Highest Salary Employee
      */
     public Employee getHighestSalaryEmployee() {
 
@@ -157,7 +189,7 @@ public class EmployeeService {
     }
 
     /**
-     * Lowest Salary Employee
+     * Get Lowest Salary Employee
      */
     public Employee getLowestSalaryEmployee() {
 
@@ -165,5 +197,12 @@ public class EmployeeService {
                 .stream()
                 .min(Comparator.comparingDouble(Employee::getSalary))
                 .orElse(null);
+    }
+
+    /**
+     * Check Employee Exists
+     */
+    public boolean employeeExists(int id) {
+        return repository.existsById(id);
     }
 }
